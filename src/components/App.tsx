@@ -16,7 +16,11 @@ import { useJobItems } from "../lib/hooks";
 
 function App() {
 	const [searchText, setSearchText] = useState("");
-	const { jobItems, isLoading } = useJobItems(searchText);
+	const { jobItemsSliced, isLoading } = useJobItems(searchText);
+
+	//I could return an array here and rename the item in line [jobItems,IsLoading] = useJobItems(searchText)
+	// even though in my useJobItems custom hook, I returned  jobItemsSliced
+
 	return (
 		<>
 			<Background />
@@ -35,7 +39,7 @@ function App() {
 						<SortingControls />
 					</SidebarTop>
 
-					<JobList jobItems={jobItems} isLoading={isLoading} />
+					<JobList jobItems={jobItemsSliced} isLoading={isLoading} />
 
 					<PaginationControls />
 				</Sidebar>
