@@ -7,3 +7,8 @@ export type JobItem = {
 	relevanceScore: number;
 	daysAgo: number;
 };
+
+export type SearchFormProps ={
+	searchText: string;
+	setSearchText: (searchText:string) => void;
+}

@@ -1,4 +1,9 @@
-export default function SearchForm({ searchText, setSearchText }) {
+import { SearchFormProps } from "../lib/types";
+
+export default function SearchForm({
+	searchText,
+	setSearchText,
+}: SearchFormProps) {
 	// const [searchText, setSearchText] = useState("");
 
 	// useEffect(() => {
