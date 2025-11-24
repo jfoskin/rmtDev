@@ -1,6 +1,7 @@
 import { useActiveId, useJobItem } from "../lib/hooks";
 // import { JobItemExpanded } from "../lib/types";
 import BookmarkIcon from "./BookmarkIcon";
+import Spinner from "./Spinner";
 
 // type JobItemContentProps = {
 // 	jobItem: JobItemExpanded | null;
@@ -11,7 +12,9 @@ export default function JobItemContent() {
 	//this also would have me remove the props in this component.
 
 	const activeId = useActiveId();
-	const jobItem = useJobItem(activeId);
+	const [jobItem, isLoading] = useJobItem(activeId);
+
+	if (isLoading) return <LoadingJobContent />;
 
 	if (!jobItem) return <EmptyJobContent />;
 
@@ -92,6 +95,16 @@ export default function JobItemContent() {
 						it!
 					</p>
 				</footer>
+			</div>
+		</section>
+	);
+}
+
+function LoadingJobContent() {
+	return (
+		<section className="job-details">
+			<div>
+				<Spinner />
 			</div>
 		</section>
 	);
