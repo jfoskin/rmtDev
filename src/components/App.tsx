@@ -17,7 +17,8 @@ import JobItemContent from "./JobItemContent";
 
 function App() {
 	const [searchText, setSearchText] = useState("");
-	const { jobItemsSliced, isLoading } = useJobItems(searchText);
+	const { jobItemsSliced, isLoading, totalNumberOfResults } =
+		useJobItems(searchText);
 
 	//I could return an array here and rename the item in line [jobItems,IsLoading] = useJobItems(searchText)
 	// even though in my useJobItems custom hook, I returned  jobItemsSliced
@@ -36,7 +37,7 @@ function App() {
 			<Container>
 				<Sidebar>
 					<SidebarTop>
-						<ResultsCount />
+						<ResultsCount totalNumberOfResults={totalNumberOfResults} />
 						<SortingControls />
 					</SidebarTop>
 
