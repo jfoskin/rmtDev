@@ -12,3 +12,15 @@ export type SearchFormProps ={
 	searchText: string;
 	setSearchText: (searchText:string) => void;
 }
+
+export type JobItemExpanded = JobItem & {
+	description: string;
+	qualifications: string[];
+	reviews: Array<string>;
+	duration: string;
+	salary: string;
+	location: string;
+	coverImgURL: string;
+	companyURL: string;
+
+}
