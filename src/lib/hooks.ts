@@ -42,7 +42,7 @@ export function useJobItem(id:number | null){
 
 	}, [id]);
 
-    return [jobItem, isLoading] as const;
+    return {jobItem, isLoading} as const;
 }
 
 export function useJobItems(searchText: string){
@@ -74,3 +74,16 @@ export function useJobItems(searchText: string){
 }
 
 
+export function useDebounce (value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+		const timerId = setTimeout(() => {
+			setDebouncedValue(value);
+		}, delay);
+
+		return () => clearTimeout(timerId);
+	}, [value,delay]);
+
+    return debouncedValue
+}

@@ -12,7 +12,7 @@ export default function JobItemContent() {
 	//this also would have me remove the props in this component.
 
 	const activeId = useActiveId();
-	const [jobItem, isLoading] = useJobItem(activeId);
+	const { jobItem, isLoading } = useJobItem(activeId);
 
 	if (isLoading) return <LoadingJobContent />;
 
