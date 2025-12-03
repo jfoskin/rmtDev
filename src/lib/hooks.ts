@@ -87,3 +87,16 @@ export function useDebounce<T> (value:T, delay = 500):T {
 
     return debouncedValue
 }
+
+// arrow function example of how to return a generic type 
+// const useDebounce = <T>(value:T, delay=500): T =>{ const [debouncedValue, setDebouncedValue] = useState(value);
+
+    // useEffect(() => {
+	// 	const timerId = setTimeout(() => {
+	// 		setDebouncedValue(value);
+	// 	}, delay);
+
+	// 	return () => clearTimeout(timerId);
+	// }, [value,delay]);
+
+    // return debouncedValue}
