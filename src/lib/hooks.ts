@@ -34,6 +34,12 @@ type JobItemApiResponse = {
     jobItem: JobItemExpanded;
 }
 
+type JobItemsApiResponse ={
+    public: boolean,
+    sorted: boolean,
+    jobItems: JobItem[]
+}
+
 //utility function
 
 const fetchJobItem =  async (id: number) : Promise<JobItemApiResponse> =>{
@@ -48,6 +54,15 @@ if(!response.ok){
     const data = await response.json()
     return data
     }
+
+const fetchJobItems = async (searchText: string) : Promise<JobItemsApiResponse> =>{
+    const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
+    if(!response.ok) {throw new Error('Response Error')}
+    const data = await response.json()
+    return data
+
+}
+
 
 export function useJobItem(id:number | null){
  const{data, isInitialLoading} = useQuery(
@@ -68,33 +83,55 @@ export function useJobItem(id:number | null){
     return {jobItem, isLoading} as const
 }
 
+
+//--------------------------------------------------------------
+
+
+// export function useJobItems(searchText: string){
+//     const [jobItems, setJobItems] = useState<JobItem[]>([]);
+//         const [isLoading, setIsLoading] = useState(false);
+
+
+//         useEffect(() => {
+//             if (!searchText) return;
+    
+//             const fetchData = async () => {
+//                 setIsLoading(true);
+//                 const response = await fetch(
+//                     `${BASE_API_URL}?search=${searchText}`
+//                 );
+//                 const data = await response.json();
+//                 setIsLoading(false);
+//                 setJobItems(data.jobItems);
+//             };
+    
+//             fetchData();
+//         }, [searchText]);
+
+//         return {jobItems, isLoading} as const;
+
+//         //I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
+// }
+
 export function useJobItems(searchText: string){
-    const [jobItems, setJobItems] = useState<JobItem[]>([]);
-        const [isLoading, setIsLoading] = useState(false);
-
-        
+    const {data, isLoading} = useQuery(
+        ['job-items', searchText],
+        () => fetchJobItems(searchText),
+        { 
+          staleTime: 1000*60*60,
+          refetchOnWindowFocus: false,
+          retry: false,
+          enabled: !searchText ? false: true, //Boolean(searchText) is an option || !!searchText
+          onError: (error) => {console.log(error)}}
+    )
     
-        useEffect(() => {
-            if (!searchText) return;
-    
-            const fetchData = async () => {
-                setIsLoading(true);
-                const response = await fetch(
-                    `${BASE_API_URL}?search=${searchText}`
-                );
-                const data = await response.json();
-                setIsLoading(false);
-                setJobItems(data.jobItems);
-            };
-    
-            fetchData();
-        }, [searchText]);
+    const jobItems = data?.jobItems
 
-        return {jobItems, isLoading} as const;
-
+    return {jobItems, isLoading} as const
         //I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
 }
 
+//----------------------------------------------------------------------------------
 
 export function useDebounce<T> (value:T, delay = 500):T {
     const [debouncedValue, setDebouncedValue] = useState(value);
