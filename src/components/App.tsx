@@ -18,12 +18,14 @@ import JobItemContent from "./JobItemContent";
 function App() {
 	const [searchText, setSearchText] = useState("");
 	const debouncedSearchText = useDebounce(searchText, 500);
-	const { jobItemsSliced, isLoading, totalNumberOfResults } =
-		useJobItems(debouncedSearchText);
+	const { jobItems, isLoading } = useJobItems(debouncedSearchText);
 
 	//I could return an array here and rename the item in line [jobItems,IsLoading] = useJobItems(searchText)
 	// even though in my useJobItems custom hook, I returned  jobItemsSliced also,
 	// returning an array you have to be mindful of how you arrange items in the array so they align with the index
+
+	const totalNumberOfResults = jobItems.length;
+	const jobItemsSliced = jobItems.slice(0, 7);
 
 	return (
 		<>
