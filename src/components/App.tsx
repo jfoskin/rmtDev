@@ -24,8 +24,8 @@ function App() {
 	// even though in my useJobItems custom hook, I returned  jobItemsSliced also,
 	// returning an array you have to be mindful of how you arrange items in the array so they align with the index
 
-	const totalNumberOfResults = jobItems.length;
-	const jobItemsSliced = jobItems.slice(0, 7);
+	const totalNumberOfResults = jobItems?.length || 0;
+	const jobItemsSliced = jobItems?.slice(0, 7) || [];
 
 	return (
 		<>

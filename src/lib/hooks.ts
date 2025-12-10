@@ -114,7 +114,7 @@ export function useJobItem(id:number | null){
 // }
 
 export function useJobItems(searchText: string){
-    const {data, isLoading} = useQuery(
+    const {data, isInitialLoading} = useQuery(
         ['job-items', searchText],
         () => fetchJobItems(searchText),
         { 
@@ -125,10 +125,13 @@ export function useJobItems(searchText: string){
           onError: (error) => {console.log(error)}}
     )
     
-    const jobItems = data?.jobItems
+    const jobItems = data?.jobItems;
+    const isLoading = isInitialLoading;
 
     return {jobItems, isLoading} as const
         //I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
+        //I can also return object {jobItems: data?.jobItems; isLoading: isInitialLoading;} as const  
+        
 }
 
 //----------------------------------------------------------------------------------
