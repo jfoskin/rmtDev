@@ -14,6 +14,7 @@ import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import JobItemContent from "./JobItemContent";
+import { Toaster } from "react-hot-toast";
 
 function App() {
 	const [searchText, setSearchText] = useState("");
@@ -52,6 +53,8 @@ function App() {
 				<JobItemContent />
 			</Container>
 			<Footer />
+
+			<Toaster position="top-right" />
 		</>
 	);
 }

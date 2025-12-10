@@ -2,6 +2,9 @@ import { useState,useEffect } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { fetchJobItem, fetchJobItems, handleError } from "./utils";
+
 
 
 
@@ -29,39 +32,43 @@ import { useQuery } from "@tanstack/react-query";
 
 //Refactoring useJobItem function to include react query
 
-type JobItemApiResponse = {
-    public: boolean;
-    jobItem: JobItemExpanded;
-}
+// type JobItemApiResponse = {
+//     public: boolean;
+//     jobItem: JobItemExpanded;
+// }
 
-type JobItemsApiResponse ={
-    public: boolean,
-    sorted: boolean,
-    jobItems: JobItem[]
-}
+// type JobItemsApiResponse ={
+//     public: boolean,
+//     sorted: boolean,
+//     jobItems: JobItem[]
+// }
 
 //utility function
 
-const fetchJobItem =  async (id: number) : Promise<JobItemApiResponse> =>{
-    const response = await fetch(`${BASE_API_URL}/${id}`)
-if(!response.ok){
-    const errorData = await response.json()
-    throw new Error(errorData.description)
+// const fetchJobItem =  async (id: number) : Promise<JobItemApiResponse> =>{
+//     const response = await fetch(`${BASE_API_URL}/${id}`)
+// if(!response.ok){
+//     const errorData = await response.json()
+//     throw new Error(errorData.description)
 
     
-}
+// }
 
-    const data = await response.json()
-    return data
-    }
+//     const data = await response.json()
+//     return data
+//     }
 
-const fetchJobItems = async (searchText: string) : Promise<JobItemsApiResponse> =>{
-    const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
-    if(!response.ok) {throw new Error('Response Error')}
-    const data = await response.json()
-    return data
+// const fetchJobItems = async (searchText: string) : Promise<JobItemsApiResponse> =>{
+//     const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
 
-}
+//     //4XX or 5XX error
+//     if(!response.ok) {
+//         const errorData = await response.json()
+//         throw new Error(errorData.description)}
+//     const data = await response.json()
+//     return data
+
+// }
 
 
 export function useJobItem(id:number | null){
@@ -73,11 +80,9 @@ export function useJobItem(id:number | null){
     refetchOnWindowFocus: false,
     retry: false,
     enabled: !id ? false: true, //Boolean(id) is an option || !!id
-    onError: (error) => {console.log(error)}
-        
-    },
- 
-)
+    onError: handleError,
+    });
+
     const jobItem = data?.jobItem
     const isLoading = isInitialLoading
     return {jobItem, isLoading} as const
@@ -122,7 +127,8 @@ export function useJobItems(searchText: string){
           refetchOnWindowFocus: false,
           retry: false,
           enabled: !searchText ? false: true, //Boolean(searchText) is an option || !!searchText
-          onError: (error) => {console.log(error)}}
+          onError: handleError
+    }
     )
     
     const jobItems = data?.jobItems;
