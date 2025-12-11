@@ -3,10 +3,12 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 type PaginationControlProps = {
 	onClick: (direction: "next" | "previous") => void;
 	currentPage: number;
+	totalNumberOfPages: number;
 };
 
 export default function PaginationControls({
 	onClick,
+	totalNumberOfPages,
 	currentPage,
 }: PaginationControlProps) {
 	return (
@@ -18,12 +20,13 @@ export default function PaginationControls({
 					onClick={() => onClick("previous")}
 				/>
 			)}
-
-			<PageButton
-				direction="next"
-				currentPage={currentPage}
-				onClick={() => onClick("next")}
-			/>
+			{currentPage < totalNumberOfPages && (
+				<PageButton
+					direction="next"
+					currentPage={currentPage}
+					onClick={() => onClick("next")}
+				/>
+			)}
 			{/* <button
 				onClick={() => onClick("previous")}
 				className="pagination__button"
@@ -51,7 +54,13 @@ function PageButton({
 	onClick,
 }: PaginationButtonProps) {
 	return (
-		<button onClick={onClick} className="pagination__button">
+		<button
+			onClick={(e) => {
+				onClick();
+				e.currentTarget.blur();
+			}}
+			className="pagination__button"
+		>
 			{direction === "previous" && (
 				<>
 					<ArrowLeftIcon />
