@@ -17,16 +17,29 @@ import JobItemContent from "./JobItemContent";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+	//state
 	const [searchText, setSearchText] = useState("");
 	const debouncedSearchText = useDebounce(searchText, 500);
 	const { jobItems, isLoading } = useJobItems(debouncedSearchText);
+	const [currentPage, setCurrentPage] = useState(1);
 
 	//I could return an array here and rename the item in line [jobItems,IsLoading] = useJobItems(searchText)
 	// even though in my useJobItems custom hook, I returned  jobItemsSliced also,
 	// returning an array you have to be mindful of how you arrange items in the array so they align with the index
 
+	//derived state
+
 	const totalNumberOfResults = jobItems?.length || 0;
 	const jobItemsSliced = jobItems?.slice(0, 7) || [];
+
+	//event handler //actions
+	const handleChangePage = (direction: "next" | "previous") => {
+		if (direction === "next") {
+			setCurrentPage((prev) => prev + 1);
+		} else if (direction === "previous") {
+			setCurrentPage((prev) => prev - 1);
+		}
+	};
 
 	return (
 		<>
@@ -48,7 +61,10 @@ function App() {
 
 					<JobList jobItems={jobItemsSliced} isLoading={isLoading} />
 
-					<PaginationControls />
+					<PaginationControls
+						onClick={handleChangePage}
+						currentPage={currentPage}
+					/>
 				</Sidebar>
 				<JobItemContent />
 			</Container>
