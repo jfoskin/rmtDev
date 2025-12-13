@@ -36,14 +36,20 @@ function App() {
 
 	const totalNumberOfResults = jobItems?.length || 0;
 	const totalNumberOfPages = totalNumberOfResults / RESULTS_PER_PAGE;
+
 	const jobItemsSorted =
-		jobItems?.sort((a, b) => {
+		// using the sort item here initially is mutating the array
+		// which is typically a bad thing to do
+		//jobItems?.sort((a, b) => {
+		//instead  im going to spread and return the data in a new array.
+		// this is not the most optimiized way to do this but we also don't want to change the original array
+		[...(jobItems || [])]?.sort((a, b) => {
 			if (sortBy === "relevant") {
 				return b.relevanceScore - a.relevanceScore;
 			} else {
 				return a.daysAgo - b.daysAgo;
 			}
-		}) || [];
+		});
 
 	const jobItemsSortedAndSliced = jobItemsSorted.slice(
 		currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
