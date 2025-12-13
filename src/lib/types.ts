@@ -1,3 +1,6 @@
+export type SortBy = "relevant" | "recent";
+export type PageDirection = "next" | "previous"
+
 export type JobItem = {
 	id: number;
 	badgeLetters: string;

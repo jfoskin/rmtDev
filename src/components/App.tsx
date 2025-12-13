@@ -16,13 +16,17 @@ import { useDebounce, useJobItems } from "../lib/hooks";
 import JobItemContent from "./JobItemContent";
 import { Toaster } from "react-hot-toast";
 import { RESULTS_PER_PAGE } from "../lib/constants";
+import { JobItem, PageDirection, SortBy } from "../lib/types";
 
 function App() {
+	//++++++++++++ State Management Structure +++++++++++\\
+
 	//state
 	const [searchText, setSearchText] = useState("");
 	const debouncedSearchText = useDebounce(searchText, 500);
 	const { jobItems, isLoading } = useJobItems(debouncedSearchText);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
 	//I could return an array here and rename the item in line [jobItems,IsLoading] = useJobItems(searchText)
 	// even though in my useJobItems custom hook, I returned  jobItemsSliced also,
@@ -32,20 +36,37 @@ function App() {
 
 	const totalNumberOfResults = jobItems?.length || 0;
 	const totalNumberOfPages = totalNumberOfResults / RESULTS_PER_PAGE;
-	const jobItemsSliced =
-		jobItems?.slice(
-			currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
-			currentPage * RESULTS_PER_PAGE
-		) || [];
+	const jobItemsSorted =
+		jobItems?.sort((a, b) => {
+			if (sortBy === "relevant") {
+				return b.relevanceScore - a.relevanceScore;
+			} else {
+				return a.daysAgo - b.daysAgo;
+			}
+		}) || [];
+
+	const jobItemsSortedAndSliced = jobItemsSorted.slice(
+		currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
+		currentPage * RESULTS_PER_PAGE
+	);
 
 	//event handler //actions
-	const handleChangePage = (direction: "next" | "previous") => {
+	const handleChangePage = (direction: PageDirection) => {
 		if (direction === "next") {
 			setCurrentPage((prev) => prev + 1);
 		} else if (direction === "previous") {
 			setCurrentPage((prev) => prev - 1);
 		}
 	};
+
+	const handleChangeSortBy = (newSortBy: SortBy) => {
+		// if (newSortBy === "relevant") {
+		setCurrentPage(1);
+		setSortBy(newSortBy);
+		// }
+	};
+
+	//++++++++++++ State Management Structure Ends +++++++++++\\
 
 	return (
 		<>
@@ -62,10 +83,10 @@ function App() {
 				<Sidebar>
 					<SidebarTop>
 						<ResultsCount totalNumberOfResults={totalNumberOfResults} />
-						<SortingControls />
+						<SortingControls onClick={handleChangeSortBy} sortBy={sortBy} />
 					</SidebarTop>
 
-					<JobList jobItems={jobItemsSliced} isLoading={isLoading} />
+					<JobList jobItems={jobItemsSortedAndSliced} isLoading={isLoading} />
 
 					<PaginationControls
 						onClick={handleChangePage}
