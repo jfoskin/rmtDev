@@ -3,7 +3,19 @@ import { useContext, useState, createContext, useEffect } from "react";
 export const BookmarksContext = createContext(null);
 
 function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
-	const [bookmarkedIds, setBookmarkedIds] = useState<number[]>([]);
+	// the way this is written below is not performant because it runs and re renders
+	//any time. this component is loaded. a better way to optimize is to possibly
+	// use a useEffect and have an empty [] as the second option  instead of passing the variable to useState
+
+	// const bookmarkedIdsFromLocalStorage = JSON.parse(
+	// 	localStorage.getItem("bookmarkedIds") || ""
+	// );
+
+	const [bookmarkedIds, setBookmarkedIds] = useState<number[]>(() =>
+		// you can give useState a function that will run once when the
+		// componenet first renders so that
+		JSON.parse(localStorage.getItem("bookmarkedIds") || "[]")
+	);
 
 	const handleToogleBookmarks = (id: number) => {
 		if (bookmarkedIds.includes(id)) {
