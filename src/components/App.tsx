@@ -66,10 +66,8 @@ function App() {
 	};
 
 	const handleChangeSortBy = (newSortBy: SortBy) => {
-		// if (newSortBy === "relevant") {
 		setCurrentPage(1);
 		setSortBy(newSortBy);
-		// }
 	};
 
 	//++++++++++++ State Management Structure Ends +++++++++++\\

@@ -22,17 +22,8 @@ export default function SortingControls({
 				onClick={() => onClick("recent")}
 				isActive={sortBy === "recent"}
 			>
-				{" "}
 				Recent
 			</SortingButton>
-			{/* <button
-				onClick={() => onClick("relevant")}
-				className={`sorting__button sorting__button--relevant ${
-					sortBy === "relevant" ? "sorting__button--active" : ""
-				}`}
-			>
-				Relevant
-			</button> */}
 		</section>
 	);
 }
@@ -46,7 +37,7 @@ type SortingButtonProps = {
 function SortingButton({ children, onClick, isActive }: SortingButtonProps) {
 	return (
 		<button
-			onClick={() => onClick}
+			onClick={onClick}
 			className={`sorting__button sorting__button--relevant ${
 				isActive ? "sorting__button--active" : ""
 			}`}
