@@ -1,4 +1,4 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
 
 export const BookmarksContext = createContext(null);
 
@@ -12,6 +12,10 @@ function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 			setBookmarkedIds((prev) => [...prev, id]);
 		}
 	};
+
+	useEffect(() => {
+		localStorage.setItem("bookmarkedIds", JSON.stringify(bookmarkedIds));
+	}, [bookmarkedIds]);
 
 	return (
 		<BookmarksContext.Provider value={{ bookmarkedIds, handleToogleBookmarks }}>
