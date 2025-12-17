@@ -1,4 +1,5 @@
-import { useContext, useState, createContext, useEffect } from "react";
+import { createContext } from "react";
+import { useLocalStorage } from "../lib/hooks";
 
 export const BookmarksContext = createContext(null);
 
@@ -11,11 +12,7 @@ function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 	// 	localStorage.getItem("bookmarkedIds") || ""
 	// );
 
-	const [bookmarkedIds, setBookmarkedIds] = useState<number[]>(() =>
-		// you can give useState a function that will run once when the
-		// componenet first renders so that
-		JSON.parse(localStorage.getItem("bookmarkedIds") || "[]")
-	);
+	const [bookmarkedIds, setBookmarkedIds] = useLocalStorage();
 
 	const handleToogleBookmarks = (id: number) => {
 		if (bookmarkedIds.includes(id)) {
@@ -24,10 +21,6 @@ function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 			setBookmarkedIds((prev) => [...prev, id]);
 		}
 	};
-
-	useEffect(() => {
-		localStorage.setItem("bookmarkedIds", JSON.stringify(bookmarkedIds));
-	}, [bookmarkedIds]);
 
 	return (
 		<BookmarksContext.Provider value={{ bookmarkedIds, handleToogleBookmarks }}>

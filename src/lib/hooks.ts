@@ -189,3 +189,21 @@ export function useActiveId (){
 
         return activeId
 }
+
+
+export function useLocalStorage (key: string) {
+
+    const [value, setValue] = useState(() =>
+		// you can give useState a function that will run once when the
+		// componenet first renders so that
+		JSON.parse(localStorage.getItem(key) || "[]")
+	);
+
+        useEffect(() => {
+            localStorage.setItem(key, JSON.stringify(value));
+        }, [value]);
+
+}
+
+
+
