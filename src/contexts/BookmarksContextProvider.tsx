@@ -12,7 +12,7 @@ function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 	// 	localStorage.getItem("bookmarkedIds") || ""
 	// );
 
-	const [bookmarkedIds, setBookmarkedIds] = useLocalStorage();
+	const [bookmarkedIds, setBookmarkedIds] = useLocalStorage("bookmarkIds", []);
 
 	const handleToogleBookmarks = (id: number) => {
 		if (bookmarkedIds.includes(id)) {

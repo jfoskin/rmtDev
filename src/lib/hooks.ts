@@ -191,17 +191,19 @@ export function useActiveId (){
 }
 
 
-export function useLocalStorage (key: string, initialValue: any) {
+export function useLocalStorage<T> (key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
 
     const [value, setValue] = useState(() =>
 		// you can give useState a function that will run once when the
 		// componenet first renders so that
-		JSON.parse(localStorage.getItem(key) || String(initialValue))
+		JSON.parse(localStorage.getItem(key) || JSON.stringify(initialValue ))
 	);
 
         useEffect(() => {
             localStorage.setItem(key, JSON.stringify(value));
         }, [value, key]);
+
+        return [value, setValue] as const
 
 }
 
