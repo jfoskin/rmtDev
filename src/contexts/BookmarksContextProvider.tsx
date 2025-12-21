@@ -1,7 +1,12 @@
 import { createContext } from "react";
 import { useLocalStorage } from "../lib/hooks";
 
-export const BookmarksContext = createContext(null);
+type BookmarksContext = {
+	bookmarkedIds: number[];
+	handleToogleBookmarks: (id: number) => void;
+};
+
+export const BookmarksContext = createContext<BookmarksContext | null>(null);
 
 function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 	// the way this is written below is not performant because it runs and re renders
@@ -12,7 +17,10 @@ function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 	// 	localStorage.getItem("bookmarkedIds") || ""
 	// );
 
-	const [bookmarkedIds, setBookmarkedIds] = useLocalStorage("bookmarkIds", []);
+	const [bookmarkedIds, setBookmarkedIds] = useLocalStorage<number[]>(
+		"bookmarkIds",
+		[]
+	);
 
 	const handleToogleBookmarks = (id: number) => {
 		if (bookmarkedIds.includes(id)) {
