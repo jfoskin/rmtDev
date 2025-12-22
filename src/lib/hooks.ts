@@ -1,9 +1,10 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect, useContext } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { fetchJobItem, fetchJobItems, handleError } from "./utils";
+import BookmarksContextProvider, { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
 
 
@@ -208,4 +209,16 @@ export function useLocalStorage<T> (key: string, initialValue: T): [T, React.Dis
 }
 
 
+
+export function useBookmarkContext() {
+	const context = useContext(BookmarksContext);
+
+	if (!context) {
+		throw new Error(
+			"useBookmarkContext ust be used within BookmarksContextProvider"
+		);
+	}
+
+	return context;
+}
 
