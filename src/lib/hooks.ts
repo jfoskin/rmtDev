@@ -119,7 +119,7 @@ export function useJobItem(id:number | null){
 //         //I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
 // }
 
-export function useJobItems(searchText: string){
+export function useSearchQuery(searchText: string){
     const {data, isInitialLoading} = useQuery(
         ['job-items', searchText],
         () => fetchJobItems(searchText),
