@@ -234,3 +234,27 @@ export function useBookmarkContext() {
 
 	return context;
 }
+
+export function useOnClickOutside(
+	refs: React.RefObject<HTMLElement>[],
+	callbackFn: () => void
+) {
+	useEffect(() => {
+		const handleClick = (e: MouseEvent) => {
+			if (
+				e.target instanceof HTMLElement &&
+				refs.every((ref) => !ref.current?.contains(e.target as Node))
+				// !buttonRef.current?.contains(event.target) &&
+				// !popoverRef.current?.contains(e.target)
+			) {
+				callbackFn();
+			}
+		};
+
+		document.addEventListener("click", handleClick);
+
+		return () => {
+			document.removeEventListener("click", handleClick);
+		};
+	}, [refs, callbackFn]);
+}
