@@ -5,13 +5,14 @@ import { useEffect, useRef, useState } from "react";
 export default function BookmarksButton() {
 	const [isOpen, setIsOpen] = useState(false);
 	const buttonRef = useRef<HTMLButtonElement>(null);
+	const popoverRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const handleClick = (e: MouseEvent) => {
 			if (
 				e.target instanceof HTMLElement &&
 				!buttonRef.current?.contains(e.target) &&
-				!e.target.closest(".bookmarks-popover")
+				!popoverRef.current?.contains(e.target)
 			) {
 				setIsOpen(false);
 			}
@@ -37,7 +38,7 @@ export default function BookmarksButton() {
 			>
 				Bookmarks <TriangleDownIcon />
 			</button>
-			{isOpen && <BookmarksPopover />}
+			{isOpen && <BookmarksPopover ref={popoverRef} />}
 		</section>
 	);
 }
