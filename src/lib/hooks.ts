@@ -1,13 +1,11 @@
-import { useState,useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
-import { useQuery } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { fetchJobItem, fetchJobItems, handleError } from "./utils";
-import BookmarksContextProvider, { BookmarksContext } from "../contexts/BookmarksContextProvider";
-
-
-
+import BookmarksContextProvider, {
+	BookmarksContext,
+} from "../contexts/BookmarksContextProvider";
 
 // export function useJobItem(id:number | null){
 //     const [jobItem, setJobItem] = useState<JobItemExpanded | null>(null);
@@ -52,7 +50,6 @@ import BookmarksContextProvider, { BookmarksContext } from "../contexts/Bookmark
 //     const errorData = await response.json()
 //     throw new Error(errorData.description)
 
-    
 // }
 
 //     const data = await response.json()
@@ -71,36 +68,56 @@ import BookmarksContextProvider, { BookmarksContext } from "../contexts/Bookmark
 
 // }
 
+export function useJobItem(id: number | null) {
+	const { data, isInitialLoading } = useQuery(
+		["job-item", id],
+		() => (id ? fetchJobItem(id) : null),
+		{
+			staleTime: 1000 * 60 * 60,
+			refetchOnWindowFocus: false,
+			retry: false,
+			enabled: !id ? false : true, //Boolean(id) is an option || !!id
+			onError: handleError,
+		}
+	);
 
-export function useJobItem(id:number | null){
- const{data, isInitialLoading} = useQuery(
-    ['job-item', id], 
-    () => id ? fetchJobItem(id) : null,
-    {
-    staleTime: 1000*60*60,
-    refetchOnWindowFocus: false,
-    retry: false,
-    enabled: !id ? false: true, //Boolean(id) is an option || !!id
-    onError: handleError,
-    });
-
-    const jobItem = data?.jobItem
-    const isLoading = isInitialLoading
-    return {jobItem, isLoading} as const
+	const jobItem = data?.jobItem;
+	const isLoading = isInitialLoading;
+	return { jobItem, isLoading } as const;
 }
-
 
 //--------------------------------------------------------------
 
+export function useJobItems(ids: number[]) {
+	const results = useQueries({
+		queries: ids.map((id) => ({
+			queryKey: ["job-item", id],
+			queryFn: () => fetchJobItem(id),
+			staleTime: 1000 * 60 * 60,
+			refetchOnWindowFocus: false,
+			retry: false,
+			enabled: !id ? false : true, //Boolean(id) is an option || !!id
+			onError: handleError,
+		})),
+	});
+
+	const jobItems = results
+		.map((result) => result.data?.jobItem)
+		.filter((jobItem) => jobItem !== undefined);
+
+	const isLoading = results.some((result) => result.isLoading);
+	return { jobItems, isLoading } as const;
+}
+
+//--------------------------------------------------------------
 
 // export function useJobItems(searchText: string){
 //     const [jobItems, setJobItems] = useState<JobItem[]>([]);
 //         const [isLoading, setIsLoading] = useState(false);
 
-
 //         useEffect(() => {
 //             if (!searchText) return;
-    
+
 //             const fetchData = async () => {
 //                 setIsLoading(true);
 //                 const response = await fetch(
@@ -110,7 +127,7 @@ export function useJobItem(id:number | null){
 //                 setIsLoading(false);
 //                 setJobItems(data.jobItems);
 //             };
-    
+
 //             fetchData();
 //         }, [searchText]);
 
@@ -119,96 +136,92 @@ export function useJobItem(id:number | null){
 //         //I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
 // }
 
-export function useSearchQuery(searchText: string){
-    const {data, isInitialLoading} = useQuery(
-        ['job-items', searchText],
-        () => fetchJobItems(searchText),
-        { 
-          staleTime: 1000*60*60,
-          refetchOnWindowFocus: false,
-          retry: false,
-          enabled: !searchText ? false: true, //Boolean(searchText) is an option || !!searchText
-          onError: handleError
-    }
-    )
-    
-    const jobItems = data?.jobItems;
-    const isLoading = isInitialLoading;
+export function useSearchQuery(searchText: string) {
+	const { data, isInitialLoading } = useQuery(
+		["job-items", searchText],
+		() => fetchJobItems(searchText),
+		{
+			staleTime: 1000 * 60 * 60,
+			refetchOnWindowFocus: false,
+			retry: false,
+			enabled: !searchText ? false : true, //Boolean(searchText) is an option || !!searchText
+			onError: handleError,
+		}
+	);
 
-    return {jobItems, isLoading} as const
-        //I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
-        //I can also return object {jobItems: data?.jobItems; isLoading: isInitialLoading;} as const  
-        
+	const jobItems = data?.jobItems;
+	const isLoading = isInitialLoading;
+
+	return { jobItems, isLoading } as const;
+	//I can also return an array [jobItemsSliced, isLoading ] and use the array in the app component to destructure
+	//I can also return object {jobItems: data?.jobItems; isLoading: isInitialLoading;} as const
 }
 
 //----------------------------------------------------------------------------------
 
-export function useDebounce<T> (value:T, delay = 500):T {
-    const [debouncedValue, setDebouncedValue] = useState(value);
+export function useDebounce<T>(value: T, delay = 500): T {
+	const [debouncedValue, setDebouncedValue] = useState(value);
 
-    useEffect(() => {
+	useEffect(() => {
 		const timerId = setTimeout(() => {
 			setDebouncedValue(value);
 		}, delay);
 
 		return () => clearTimeout(timerId);
-	}, [value,delay]);
+	}, [value, delay]);
 
-    return debouncedValue
+	return debouncedValue;
 }
 
-// arrow function example of how to return a generic type 
+// arrow function example of how to return a generic type
 // const useDebounce = <T>(value:T, delay=500): T =>{ const [debouncedValue, setDebouncedValue] = useState(value);
 
-    // useEffect(() => {
-	// 	const timerId = setTimeout(() => {
-	// 		setDebouncedValue(value);
-	// 	}, delay);
+// useEffect(() => {
+// 	const timerId = setTimeout(() => {
+// 		setDebouncedValue(value);
+// 	}, delay);
 
-	// 	return () => clearTimeout(timerId);
-	// }, [value,delay]);
+// 	return () => clearTimeout(timerId);
+// }, [value,delay]);
 
-    // return debouncedValue 
-    // }
+// return debouncedValue
+// }
 
+export function useActiveId() {
+	const [activeId, setActiveId] = useState<number | null>(null);
 
-export function useActiveId (){
-        const [activeId, setActiveId] = useState<number | null>(null);
+	useEffect(() => {
+		const handleHashChange = () => {
+			const id = +window.location.hash.slice(1);
+			setActiveId(id);
+		};
+		handleHashChange();
+		window.addEventListener("hashchange", handleHashChange);
 
-        useEffect(() => {
-            const handleHashChange = () => {
-                const id = +window.location.hash.slice(1);
-                setActiveId(id);
-            };
-            handleHashChange();
-            window.addEventListener("hashchange", handleHashChange);
-    
-            return () => {
-                window.removeEventListener("hashchange", handleHashChange);
-            };
-        }, []);
+		return () => {
+			window.removeEventListener("hashchange", handleHashChange);
+		};
+	}, []);
 
-        return activeId
+	return activeId;
 }
 
-
-export function useLocalStorage<T> (key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
-
-    const [value, setValue] = useState(() =>
+export function useLocalStorage<T>(
+	key: string,
+	initialValue: T
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+	const [value, setValue] = useState(() =>
 		// you can give useState a function that will run once when the
 		// componenet first renders so that
-		JSON.parse(localStorage.getItem(key) || JSON.stringify(initialValue ))
+		JSON.parse(localStorage.getItem(key) || JSON.stringify(initialValue))
 	);
 
-        useEffect(() => {
-            localStorage.setItem(key, JSON.stringify(value));
-        }, [value, key]);
+	useEffect(() => {
+		localStorage.setItem(key, JSON.stringify(value));
+	}, [value, key]);
 
-        return [value, setValue] as const
-
+	return [value, setValue] as const;
 }
-
-
 
 export function useBookmarkContext() {
 	const context = useContext(BookmarksContext);
@@ -221,4 +234,3 @@ export function useBookmarkContext() {
 
 	return context;
 }
-

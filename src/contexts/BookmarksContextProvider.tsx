@@ -1,10 +1,11 @@
 import { createContext } from "react";
-import { useLocalStorage, useSearchQuery } from "../lib/hooks";
+import { useJobItems, useLocalStorage } from "../lib/hooks";
+import { JobItemExpanded } from "../lib/types";
 
 type BookmarksContext = {
 	bookmarkedIds: number[];
 	handleToogleBookmarks: (id: number) => void;
-	bookmarkedJobItems: [];
+	bookmarkedJobItems: JobItemExpanded[];
 	isLoading: boolean;
 };
 
@@ -25,7 +26,7 @@ function BookmarksContextProvider({ children }: { children: React.ReactNode }) {
 	);
 
 	const { jobItems: bookmarkedJobItems, isLoading } =
-		useSearchQuery(bookmarkedIds);
+		useJobItems(bookmarkedIds);
 
 	const handleToogleBookmarks = (id: number) => {
 		if (bookmarkedIds.includes(id)) {
