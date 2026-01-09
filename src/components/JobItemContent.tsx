@@ -1,4 +1,4 @@
-import { useActiveId, useJobItem } from "../lib/hooks";
+import { useActiveIdContext, useJobItem } from "../lib/hooks";
 // import { JobItemExpanded } from "../lib/types";
 import BookmarkIcon from "./BookmarkIcon";
 import Spinner from "./Spinner";
@@ -11,7 +11,7 @@ export default function JobItemContent() {
 	// Having these custom hooks here allows for the app component not to have to rerender.
 	//this also would have me remove the props in this component.
 
-	const activeId = useActiveId();
+	const { activeId } = useActiveIdContext();
 	const { jobItem, isLoading } = useJobItem(activeId);
 
 	if (isLoading) return <LoadingJobContent />;
