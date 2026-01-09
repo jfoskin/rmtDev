@@ -6,6 +6,7 @@ import { fetchJobItem, fetchJobItems, handleError } from "./utils";
 import BookmarksContextProvider, {
 	BookmarksContext,
 } from "../contexts/BookmarksContextProvider";
+import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 
 // export function useJobItem(id:number | null){
 //     const [jobItem, setJobItem] = useState<JobItemExpanded | null>(null);
@@ -223,7 +224,18 @@ export function useLocalStorage<T>(
 	return [value, setValue] as const;
 }
 
-export function useBookmarkContext() {
+export function useActiveIdContext() {
+	const context = useContext(ActiveIdContext);
+
+	if (!context) {
+		throw new Error(
+			"useBookmarkContext ust be used within BookmarksContextProvider"
+		);
+	}
+
+	return context;
+}
+
 	const context = useContext(BookmarksContext);
 
 	if (!context) {
@@ -234,6 +246,7 @@ export function useBookmarkContext() {
 
 	return context;
 }
+
 
 export function useOnClickOutside(
 	refs: React.RefObject<HTMLElement>[],
