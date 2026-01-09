@@ -9,7 +9,7 @@ type JobListProps = {
 };
 
 export function JobList({ jobItems, isLoading }: JobListProps) {
-	const activeId = useActiveIdContext;
+	const { activeId } = useActiveIdContext();
 	return (
 		<ul className="job-list">
 			{isLoading && <Spinner />}

@@ -229,24 +229,24 @@ export function useActiveIdContext() {
 
 	if (!context) {
 		throw new Error(
-			"useBookmarkContext ust be used within BookmarksContextProvider"
+			"useActiveIdContext must be used within ActiveIdContextProvider "
 		);
 	}
 
 	return context;
 }
 
+export function useBookmarkContext() {
 	const context = useContext(BookmarksContext);
 
 	if (!context) {
 		throw new Error(
-			"useBookmarkContext ust be used within BookmarksContextProvider"
+			"useBookmarkContext must be used within BookmarksContextProvider"
 		);
 	}
 
 	return context;
 }
-
 
 export function useOnClickOutside(
 	refs: React.RefObject<HTMLElement>[],
