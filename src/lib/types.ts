@@ -1,5 +1,5 @@
 export type SortBy = "relevant" | "recent";
-export type PageDirection = "next" | "previous"
+export type PageDirection = "next" | "previous";
 
 export type JobItem = {
 	id: number;
@@ -11,11 +11,6 @@ export type JobItem = {
 	daysAgo: number;
 };
 
-export type SearchFormProps ={
-	searchText: string;
-	setSearchText: (searchText:string) => void;
-}
-
 export type JobItemExpanded = JobItem & {
 	description: string;
 	qualifications: string[];
@@ -25,5 +20,4 @@ export type JobItemExpanded = JobItem & {
 	location: string;
 	coverImgURL: string;
 	companyURL: string;
-
-}
+};
