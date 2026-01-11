@@ -2,14 +2,13 @@ import { createContext, useState } from "react";
 import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
 import { JobItem, PageDirection, SortBy } from "../lib/types";
 import { RESULTS_PER_PAGE } from "../lib/constants";
-import { SearchTextContext } from "./SearchTextContextProvider";
 
 type JobItemsContext = {
 	jobItems: JobItem[] | undefined;
 	isLoading: boolean;
 	jobItemsSortedAndSliced: JobItem[];
 	totalNumberOfResults: number;
-	totalNumberofPages: number;
+	totalNumberOfPages: number;
 	currentPage: number;
 	sortBy: SortBy;
 	handleChangePage: (direction: PageDirection) => void;

@@ -36,17 +36,13 @@ function App() {
 			<Container>
 				<Sidebar>
 					<SidebarTop>
-						<ResultsCount totalNumberOfResults={totalNumberOfResults} />
-						<SortingControls onClick={handleChangeSortBy} sortBy={sortBy} />
+						<ResultsCount />
+						<SortingControls />
 					</SidebarTop>
 
-					<JobList jobItems={jobItemsSortedAndSliced} isLoading={isLoading} />
+					<JobList />
 
-					<PaginationControls
-						onClick={handleChangePage}
-						currentPage={currentPage}
-						totalNumberOfPages={totalNumberOfPages}
-					/>
+					<PaginationControls />
 				</Sidebar>
 				<JobItemContent />
 			</Container>
