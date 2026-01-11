@@ -1,10 +1,19 @@
 import { createContext, useState } from "react";
-import { useDebounce, useSearchQuery } from "../lib/hooks";
+import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
+import { JobItem, PageDirection, SortBy } from "../lib/types";
+import { RESULTS_PER_PAGE } from "../lib/constants";
+import { SearchTextContext } from "./SearchTextContextProvider";
 
 type JobItemsContext = {
-	searchText: string;
-	debouncedSearchText: string;
-	handleChangeSearchText: (newSearchText: string) => void;
+	jobItems: JobItem[] | undefined;
+	isLoading: boolean;
+	jobItemsSortedAndSliced: JobItem[];
+	totalNumberOfResults: number;
+	totalNumberofPages: number;
+	currentPage: number;
+	sortBy: SortBy;
+	handleChangePage: (direction: PageDirection) => void;
+	handleChangeSortBy: (newSortBy: SortBy) => void;
 };
 
 export const JobItemsContext = createContext<JobItemsContext | null>(null);
@@ -18,6 +27,10 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 	// 	localStorage.getItem("bookmarkedIds") || ""
 	// );
 
+	//dependency on other context
+
+	const { debouncedSearchText } = useSearchTextContext();
+
 	//state
 
 	const { jobItems, isLoading } = useSearchQuery(debouncedSearchText);
@@ -25,6 +38,9 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 	const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
 	//derived state
+
+	const totalNumberOfResults = jobItems?.length || 0;
+	const totalNumberofPages = totalNumberOfResults / RESULTS_PER_PAGE;
 
 	const jobItemsSorted =
 		// using the sort item here initially is mutating the array
@@ -65,7 +81,13 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 	return (
 		<JobItemsContext.Provider
 			value={{
+				jobItems,
+				isLoading,
 				jobItemsSortedAndSliced,
+				totalNumberOfResults,
+				totalNumberofPages,
+				currentPage,
+				sortBy,
 				handleChangePage,
 				handleChangeSortBy,
 			}}

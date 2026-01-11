@@ -12,11 +12,8 @@ import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
-import { useSearchQuery } from "../lib/hooks";
 import JobItemContent from "./JobItemContent";
 import { Toaster } from "react-hot-toast";
-import { RESULTS_PER_PAGE } from "../lib/constants";
-import { PageDirection, SortBy } from "../lib/types";
 
 function App() {
 	//++++++++++++ State Management Structure +++++++++++\\

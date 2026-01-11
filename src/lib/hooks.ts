@@ -8,6 +8,7 @@ import BookmarksContextProvider, {
 } from "../contexts/BookmarksContextProvider";
 import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 import { SearchTextContext } from "../contexts/SearchTextContextProvider";
+import { JobItemsContext } from "../contexts/JobItemsContextProvider";
 
 // export function useJobItem(id:number | null){
 //     const [jobItem, setJobItem] = useState<JobItemExpanded | null>(null);
@@ -255,6 +256,18 @@ export function useSearchTextContext() {
 	if (!context) {
 		throw new Error(
 			"useSearchTextContext must be used within SearchTextContextProvider "
+		);
+	}
+
+	return context;
+}
+
+export function useJobItemsContext() {
+	const context = useContext(JobItemsContext);
+
+	if (!context) {
+		throw new Error(
+			"useJobItemsContext must be used within JobItemsContextProvider "
 		);
 	}
 
