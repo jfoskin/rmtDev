@@ -1,11 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import { JobItem, JobItemExpanded } from "./types";
-import { BASE_API_URL } from "./constants";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { fetchJobItem, fetchJobItems, handleError } from "./utils";
-import BookmarksContextProvider, {
-	BookmarksContext,
-} from "../contexts/BookmarksContextProvider";
+import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 import { SearchTextContext } from "../contexts/SearchTextContextProvider";
 import { JobItemsContext } from "../contexts/JobItemsContextProvider";

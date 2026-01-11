@@ -4,16 +4,15 @@ import Container from "./Container";
 import Footer from "./Footer";
 import Header, { HeaderTop } from "./Header";
 
-import { useState } from "react";
 import Logo from "./Logo";
 import SearchForm from "./SearchForm";
 import Sidebar, { SidebarTop } from "./Sidebar";
 import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
-import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
 import JobItemContent from "./JobItemContent";
 import { Toaster } from "react-hot-toast";
+import JobListSearch from "./JobListSearch";
 
 function App() {
 	//++++++++++++ State Management Structure +++++++++++\\

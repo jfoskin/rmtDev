@@ -39,7 +39,7 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 	//derived state
 
 	const totalNumberOfResults = jobItems?.length || 0;
-	const totalNumberofPages = totalNumberOfResults / RESULTS_PER_PAGE;
+	const totalNumberOfPages = totalNumberOfResults / RESULTS_PER_PAGE;
 
 	const jobItemsSorted = useMemo(
 		() =>
@@ -100,7 +100,7 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 			isLoading,
 			jobItemsSortedAndSliced,
 			totalNumberOfResults,
-			totalNumberofPages,
+			totalNumberOfPages,
 			currentPage,
 			sortBy,
 			handleChangePage,
@@ -111,7 +111,7 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 			isLoading,
 			jobItemsSortedAndSliced,
 			totalNumberOfResults,
-			totalNumberofPages,
+			totalNumberOfPages,
 			currentPage,
 			sortBy,
 			handleChangePage,
