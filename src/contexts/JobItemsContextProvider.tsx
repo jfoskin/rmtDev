@@ -48,6 +48,10 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 			//jobItems?.sort((a, b) => {
 			//instead  im going to spread and return the data in a new array.
 			// this is not the most optimiized way to do this but we also don't want to change the original array
+
+			// also because use memo is being used we want to always remember to spread the data
+			// so that the array changes this could cause a bug if not because the jobItemssortedandSLiced
+			//dependency array is looking for a change in the array in order to run
 			[...(jobItems || [])]?.sort((a, b) => {
 				if (sortBy === "relevant") {
 					return b.relevanceScore - a.relevanceScore;
