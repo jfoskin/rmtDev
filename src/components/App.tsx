@@ -40,7 +40,7 @@ function App() {
 						<SortingControls />
 					</SidebarTop>
 
-					<JobList />
+					<JobListSearch />
 
 					<PaginationControls />
 				</Sidebar>
