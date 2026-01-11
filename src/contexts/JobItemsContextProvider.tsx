@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
 import { JobItem, PageDirection, SortBy } from "../lib/types";
 import { RESULTS_PER_PAGE } from "../lib/constants";
@@ -73,35 +73,54 @@ function JobItemsContextProvider({ children }: { children: React.ReactNode }) {
 
 	//event handler //actions
 
-	const handleChangePage = (direction: PageDirection) => {
-		if (direction === "next") {
-			setCurrentPage((prev) => prev + 1);
-		} else if (direction === "previous") {
-			setCurrentPage((prev) => prev - 1);
-		}
-	};
+	const handleChangePage = useCallback(
+		() => (direction: PageDirection) => {
+			if (direction === "next") {
+				setCurrentPage((prev) => prev + 1);
+			} else if (direction === "previous") {
+				setCurrentPage((prev) => prev - 1);
+			}
+		},
+		[]
+	);
 
-	const handleChangeSortBy = (newSortBy: SortBy) => {
-		setCurrentPage(1);
-		setSortBy(newSortBy);
-	};
+	const handleChangeSortBy = useCallback(
+		() => (newSortBy: SortBy) => {
+			setCurrentPage(1);
+			setSortBy(newSortBy);
+		},
+		[]
+	);
 
 	//++++++++++++ State Management Structure Ends +++++++++++\\
 
+	const contextValue = useMemo(
+		() => ({
+			jobItems,
+			isLoading,
+			jobItemsSortedAndSliced,
+			totalNumberOfResults,
+			totalNumberofPages,
+			currentPage,
+			sortBy,
+			handleChangePage,
+			handleChangeSortBy,
+		}),
+		[
+			jobItems,
+			isLoading,
+			jobItemsSortedAndSliced,
+			totalNumberOfResults,
+			totalNumberofPages,
+			currentPage,
+			sortBy,
+			handleChangePage,
+			handleChangeSortBy,
+		]
+	);
+
 	return (
-		<JobItemsContext.Provider
-			value={{
-				jobItems,
-				isLoading,
-				jobItemsSortedAndSliced,
-				totalNumberOfResults,
-				totalNumberofPages,
-				currentPage,
-				sortBy,
-				handleChangePage,
-				handleChangeSortBy,
-			}}
-		>
+		<JobItemsContext.Provider value={contextValue}>
 			{children}
 		</JobItemsContext.Provider>
 	);
